@@ -8,6 +8,10 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 
+name_to_string <- function(z){
+  nm <-deparse(substitute(z))
+  print(nm)
+}
 ### CTD CSV Preparation Bog Mar12
 
 filenames <- list.files(path = "./data")
@@ -21,6 +25,19 @@ for(i in names){
   assign(i, as_tibble(read.csv(file.path(filepath), skip = 18, header = T)))
 }
 
-###Aggregate Bog Data
+for(i in names){
+  x <- list()
+  for(j in nrow(get(i))){
+    x$wbody <- i
+    x <- data.frame(x)
+    }
+   assign(i, cbind(get(i), x))
+   
+}
+
+
+
+###Add Differentiation Columns
+
 
 
