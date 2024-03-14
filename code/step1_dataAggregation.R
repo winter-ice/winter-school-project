@@ -8,6 +8,7 @@ library(tidyverse)
 library(lubridate)
 library(data.table)
 library(plyr)
+library(ggplot2)
 
 ### CTD CSV Preparation Bog & Lake
 
@@ -69,6 +70,69 @@ agg_all$holeID <- factor(substr(agg_all$wbody, 13, 14))
 agg_all$event <- factor(substr(agg_all$wbody, 16, 17))
 temp <- data.frame(NULL)
 temp <- substr(agg_all$wbody, 7,8)
-agg_all$event <- paste0(temp, agg_all$event)
+agg_all$event <- factor(paste0(temp, agg_all$event))
 agg_all$wbody <- factor(substr(agg_all$wbody, 1, 3))
 
+levels(agg_all$event) <- c("12a", "13a", "13b", "13c", "13d")
+
+temp_agg1 <- agg_all[,c(1:21,42:43)]
+temp_agg2 <- agg_all[,c(1, 20:44)]
+
+x <- list()
+y <- names(temp_agg1)
+
+for(i in 1:length(y)){
+  if(nchar(y[i]) > 9){
+    x[i] <- substr(y[i], 1, nchar(y[i])-7)
+  }else{x[i] <- y[i]}
+  if(x[i] %in% "temp_c" & i > 13){
+    x[i] <- paste0("temp_c", 20)}else{next}
+}
+
+names(temp_agg1) <- x
+
+
+k <- list()
+l <- names(temp_agg2)
+
+for(i in 1:length(l)){
+  if(nchar(l[i]) > 9){
+    k[i] <- substr(l[i], 1, nchar(l[i])-7)
+  }else{k[i] <- l[i]}
+  if(k[i] %in% "temp_c" & i > 13){
+    k[i] <- paste0("temp_c", 20)}else{next}
+  }
+
+
+names(temp_agg2) <- k
+
+agg_all_2 <- temp_agg1 %>%
+  right_join(temp_agg2, by = intersect(colnames(temp_agg1), colnames(temp_agg2)))
+
+
+names(agg_all_2)
+View(agg_all_2)
+#####
+
+eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
+
+names(eliz_data) <- c("wbody", "zone", "holeID", "event", "date_time",
+                     "turb_ntu", "bga_pc_fluoro_rfu", "act_cond_mscm",
+                     "spec_cond_mscm", "sal_psu", "resis_ohmcm", "dens_gcm", 
+                     "tot_diss_solids_ppt", "chl_a_fluoro_rfu", 
+                     "temp_c", "baro_press_mmhg", "press_psi",
+                     "depth_ft", "depth_m", "surf_elev_m",
+                     "ext_volt_v", "batt_capa", "baro_press_mbar",
+                     "temp_c20", "lat", "lon", "marked")
+eliz_data$date_time <- lubridate::as_datetime(eliz_data$date_time)
+eliz_data$zone <- factor(eliz_data$zone)
+levels(eliz_data$zone) <- c("l", "p")
+eliz_data$wbody <- factor(eliz_data$wbody)
+levels(eliz_data$wbody) <- c("Bog", "Lak")
+eliz_data$holeID <- factor(eliz_data$holeID)
+eliz_data$event <- factor(eliz_data$event)
+
+nrow(setdiff(eliz_data, agg_all_2))
+
+plot(agg_all_2$date_time, agg_all_2$sal_psu)
+plot(eliz_data$date_time, eliz_data$sal_psu)
