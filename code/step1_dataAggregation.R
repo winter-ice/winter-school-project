@@ -38,7 +38,7 @@ for(i in names){
 } #row bind all data sets
 
 agg_all <- as_tibble(x) #rename dataset
-
+rm(x)
 ###Because of different CTD probes being used, there are different variable names
 #####This will have to be dealt with at a later date
 
@@ -64,6 +64,11 @@ names(agg_all) <- c("date_time", "turb_ntu_803671", "bga_pc_fluoro_rfu_797015",
 head(agg_all)
 
 agg_all$date_time <- lubridate::as_datetime(agg_all$date_time)
-agg_all$zone <- substr(agg_all$wbody, 13, 13)
-agg_all$holeID <- substr(agg_all$wbody, )
+agg_all$zone <- factor(substr(agg_all$wbody, 13, 13))
+agg_all$holeID <- factor(substr(agg_all$wbody, 13, 14))
+agg_all$event <- factor(substr(agg_all$wbody, 16, 17))
+temp <- data.frame(NULL)
+temp <- substr(agg_all$wbody, 7,8)
+agg_all$event <- paste0(temp, agg_all$event)
+agg_all$wbody <- factor(substr(agg_all$wbody, 1, 3))
 
