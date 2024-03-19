@@ -61,10 +61,10 @@ names(agg_all) <- c("date_time", "turb_ntu_803671", "bga_pc_fluoro_rfu_797015",
                     "press_psi_785110", "depth_ft_785110",
                     "ext_volt_v_804569", "batt_capa_804569",
                     "baro_press_mbar_791538", "temp_c_791538",
-                    "lat", "lon", "depth_m_785110")
+                    "lat", "lon", "depth_m_785110", "depth_ft_785112")
 head(agg_all)
 
-agg_all$date_time <- lubridate::as_datetime(agg_all$date_time)
+agg_all$date_time <- lubridate::as_datetime(agg_all$date_time) #May need to open LakMar13CTD-L3-01d and mess with date time formatting
 agg_all$zone <- factor(substr(agg_all$wbody, 13, 13))
 agg_all$holeID <- factor(substr(agg_all$wbody, 13, 14))
 agg_all$event <- factor(substr(agg_all$wbody, 16, 17))
@@ -73,10 +73,10 @@ temp <- substr(agg_all$wbody, 7,8)
 agg_all$event <- factor(paste0(temp, agg_all$event))
 agg_all$wbody <- factor(substr(agg_all$wbody, 1, 3))
 
-levels(agg_all$event) <- c("12a", "13a", "13b", "13c", "13d")
+levels(agg_all$event) <- c("12a", "12a", "13a", "13b", "13c", "13d")
 
 temp_agg1 <- agg_all[,c(1:21,42:43)]
-temp_agg2 <- agg_all[,c(1, 20:44)]
+temp_agg2 <- agg_all[,c(1, 20:45)]
 
 x <- list()
 y <- names(temp_agg1)
@@ -100,18 +100,22 @@ for(i in 1:length(l)){
     k[i] <- substr(l[i], 1, nchar(l[i])-7)
   }else{k[i] <- l[i]}
   if(k[i] %in% "temp_c" & i > 13){
-    k[i] <- paste0("temp_c", 20)}else{next}
+    k[i] <- paste0("temp_c", 20)}else{
+  if(k[i] %in% "depth_ft" & i > 19){
+    k[i] <- paste0("depth_ft", 2)}else{next}
   }
+}
 
 
 names(temp_agg2) <- k
 
 agg_all_2 <- temp_agg1 %>%
-  right_join(temp_agg2, by = intersect(colnames(temp_agg1), colnames(temp_agg2)))
+  full_join(temp_agg2, by = intersect(colnames(temp_agg1), colnames(temp_agg2)))
 
+agg_all_f <- agg_all_2[!is.na(agg_all_2$temp_c),]
 
 names(agg_all_2)
-View(agg_all_2)
+
 #####
 
 eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
@@ -130,9 +134,12 @@ levels(eliz_data$zone) <- c("l", "p")
 eliz_data$wbody <- factor(eliz_data$wbody)
 levels(eliz_data$wbody) <- c("Bog", "Lak")
 eliz_data$holeID <- factor(eliz_data$holeID)
+levels(eliz_data$holeID) <- c("L1", "L2", "L3", "L4", "L5", "L6", "P1", "P2", "P3", "P4", "P5", "P6")
 eliz_data$event <- factor(eliz_data$event)
+levels(eliz_data$event) <- c("12a", "13b", "13a", "13b", "13c", "13d")
+eliz_data$depth_ft2 <- NA
+eliz_data <- eliz_data %>% as_tibble()
+eliz_data <- eliz_data[names(agg_all_f)]
 
-nrow(setdiff(eliz_data, agg_all_2))
-
-plot(agg_all_2$date_time, agg_all_2$sal_psu)
-plot(eliz_data$date_time, eliz_data$sal_psu)
+test_agg <- agg_all_f[,-1]
+test_eliz <- eliz_data[,-1]
