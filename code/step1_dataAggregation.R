@@ -117,29 +117,34 @@ agg_all_f <- agg_all_2[!is.na(agg_all_2$temp_c),]
 names(agg_all_2)
 
 #####
+# 
+# eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
+# 
+# names(eliz_data) <- c("wbody", "zone", "holeID", "event", "date_time",
+#                      "turb_ntu", "bga_pc_fluoro_rfu", "act_cond_mscm",
+#                      "spec_cond_mscm", "sal_psu", "resis_ohmcm", "dens_gcm", 
+#                      "tot_diss_solids_ppt", "chl_a_fluoro_rfu", 
+#                      "temp_c", "baro_press_mmhg", "press_psi",
+#                      "depth_ft", "depth_m", "surf_elev_m",
+#                      "ext_volt_v", "batt_capa", "baro_press_mbar",
+#                      "temp_c20", "lat", "lon", "marked")
+# eliz_data$date_time <- lubridate::as_datetime(eliz_data$date_time)
+# eliz_data$zone <- factor(eliz_data$zone)
+# levels(eliz_data$zone) <- c("l", "p")
+# eliz_data$wbody <- factor(eliz_data$wbody)
+# levels(eliz_data$wbody) <- c("Bog", "Lak")
+# eliz_data$holeID <- factor(eliz_data$holeID)
+# levels(eliz_data$holeID) <- c("L1", "L2", "L3", "L4", "L5", "L6", "P1", "P2", "P3", "P4", "P5", "P6")
+# eliz_data$event <- factor(eliz_data$event)
+# levels(eliz_data$event) <- c("12a", "13b", "13a", "13b", "13c", "13d")
+# eliz_data$depth_ft2 <- NA
+# eliz_data <- eliz_data %>% as_tibble()
+# eliz_data <- eliz_data[names(agg_all_f)]
+# 
+# test_agg <- agg_all_f[,-1]
+# test_eliz <- eliz_data[,-1]
 
-eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
+#####
 
-names(eliz_data) <- c("wbody", "zone", "holeID", "event", "date_time",
-                     "turb_ntu", "bga_pc_fluoro_rfu", "act_cond_mscm",
-                     "spec_cond_mscm", "sal_psu", "resis_ohmcm", "dens_gcm", 
-                     "tot_diss_solids_ppt", "chl_a_fluoro_rfu", 
-                     "temp_c", "baro_press_mmhg", "press_psi",
-                     "depth_ft", "depth_m", "surf_elev_m",
-                     "ext_volt_v", "batt_capa", "baro_press_mbar",
-                     "temp_c20", "lat", "lon", "marked")
-eliz_data$date_time <- lubridate::as_datetime(eliz_data$date_time)
-eliz_data$zone <- factor(eliz_data$zone)
-levels(eliz_data$zone) <- c("l", "p")
-eliz_data$wbody <- factor(eliz_data$wbody)
-levels(eliz_data$wbody) <- c("Bog", "Lak")
-eliz_data$holeID <- factor(eliz_data$holeID)
-levels(eliz_data$holeID) <- c("L1", "L2", "L3", "L4", "L5", "L6", "P1", "P2", "P3", "P4", "P5", "P6")
-eliz_data$event <- factor(eliz_data$event)
-levels(eliz_data$event) <- c("12a", "13b", "13a", "13b", "13c", "13d")
-eliz_data$depth_ft2 <- NA
-eliz_data <- eliz_data %>% as_tibble()
-eliz_data <- eliz_data[names(agg_all_f)]
 
-test_agg <- agg_all_f[,-1]
-test_eliz <- eliz_data[,-1]
+
