@@ -75,7 +75,7 @@ agg_all$wbody <- factor(substr(agg_all$wbody, 1, 3))
 
 levels(agg_all$event) <- c("12a", "12a", "13a", "13b", "13c", "13d")
 
-temp_agg1 <- agg_all[,c(1:21,42:43)]
+temp_agg1 <- agg_all[,c(1:21,42:45)]
 temp_agg2 <- agg_all[,c(1, 20:45)]
 
 x <- list()
@@ -114,8 +114,9 @@ agg_all_2 <- temp_agg1 %>%
 
 agg_all_f <- agg_all_2[!is.na(agg_all_2$temp_c),]
 
-names(agg_all_2)
+names(agg_all_f)
 
+View(agg_all_f)
 #####
 # 
 # eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
