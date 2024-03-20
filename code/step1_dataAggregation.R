@@ -116,15 +116,15 @@ agg_all_f <- agg_all_2[!is.na(agg_all_2$temp_c),]
 
 names(agg_all_f)
 
-View(agg_all_f)
+
 #####
 # 
-# eliz_data <- read.csv("~/Desktop/trout_CDT_compiled_data.csv", header= T)
+# eliz_data <- read.csv("~/Desktop/Projects/winter-school-project/archive/trout_CDT_compiled_data.csv", header= T)
 # 
 # names(eliz_data) <- c("wbody", "zone", "holeID", "event", "date_time",
 #                      "turb_ntu", "bga_pc_fluoro_rfu", "act_cond_mscm",
-#                      "spec_cond_mscm", "sal_psu", "resis_ohmcm", "dens_gcm", 
-#                      "tot_diss_solids_ppt", "chl_a_fluoro_rfu", 
+#                      "spec_cond_mscm", "sal_psu", "resis_ohmcm", "dens_gcm",
+#                      "tot_diss_solids_ppt", "chl_a_fluoro_rfu",
 #                      "temp_c", "baro_press_mmhg", "press_psi",
 #                      "depth_ft", "depth_m", "surf_elev_m",
 #                      "ext_volt_v", "batt_capa", "baro_press_mbar",
@@ -147,5 +147,9 @@ View(agg_all_f)
 
 #####
 
+
+test <- subset(agg_all_f, 
+               agg_all_f$date_time > as_datetime("2024-03-12 23:59:59"))
+with(test, plot(date_time, bga_pc_fluoro_rfu))
 
 
